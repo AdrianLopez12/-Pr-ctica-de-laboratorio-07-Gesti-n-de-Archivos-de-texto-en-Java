@@ -1,13 +1,18 @@
 package ec.edu.ups.interfaz;
 
+import java.io.File;
 import javax.swing.JFileChooser;
+import ec.edu.ups.controlador.controladorFiles;
+import javax.swing.JOptionPane;
 
 public class interfaz extends javax.swing.JFrame {
+    JFileChooser fileChooser=new JFileChooser();
+   controladorFiles conFiles;
     public interfaz() {
-        JFileChooser fileChooser=new JFileChooser();
+        
         initComponents();
         this.setTitle("Encriptado");
-        jButton2.setVisible(false);
+       // jButton2.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
@@ -20,6 +25,7 @@ public class interfaz extends javax.swing.JFrame {
         jTextField1 = new javax.swing.JTextField();
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
         menuBar = new javax.swing.JMenuBar();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -30,7 +36,7 @@ public class interfaz extends javax.swing.JFrame {
 
         jLabel1.setText("Ruta");
 
-        jButton1.setText("Comprobar ruta");
+        jButton1.setText("Selecciona");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -38,6 +44,13 @@ public class interfaz extends javax.swing.JFrame {
         });
 
         jButton2.setText("Generar");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        jLabel2.setText("Ingrese nombre");
         setJMenuBar(menuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -50,29 +63,35 @@ public class interfaz extends javax.swing.JFrame {
                         .addGap(77, 77, 77)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 212, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(64, 64, 64)
-                        .addComponent(jLabel1)
-                        .addGap(50, 50, 50)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(111, 111, 111)
-                        .addComponent(jButton1)))
-                .addContainerGap(111, Short.MAX_VALUE))
+                        .addGap(48, 48, 48)
+                        .addComponent(jLabel2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(163, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton2)
-                .addGap(80, 80, 80))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jButton2)
+                        .addGap(80, 80, 80))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jButton1)
+                        .addGap(76, 76, 76))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel2))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jButton1))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 11, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(29, 29, 29)
                 .addComponent(jButton2)
@@ -83,12 +102,28 @@ public class interfaz extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-        
+    fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+    
+        int selecion=fileChooser.showOpenDialog(this);
+        if(selecion==JFileChooser.APPROVE_OPTION){
+            
+            File fichero=fileChooser.getSelectedFile();
+           // jTextField1.setText(fichero.getAbsolutePath());
+            jButton2.setVisible(true);
+            conFiles=new controladorFiles(fichero.getAbsolutePath());
+        }
         
         
         
     }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        String texto=jTextArea1.getText();
+        texto=conFiles.encriptar(texto);
+        String nombre=jTextField1.getText();
+        conFiles.generarArchivo(texto, nombre);
+        JOptionPane.showMessageDialog(this, "Archivo creado exitosamente");
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     
     public static void main(String args[]) {
@@ -127,6 +162,7 @@ public class interfaz extends javax.swing.JFrame {
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JTextField jTextField1;
