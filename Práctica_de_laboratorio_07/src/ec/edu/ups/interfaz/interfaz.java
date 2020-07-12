@@ -14,7 +14,7 @@ public class interfaz extends javax.swing.JFrame {
 
         initComponents();
         this.setTitle("Encriptado");
-        // jButton2.setVisible(false);
+        jButton2.setVisible(false);
     }
 
     @SuppressWarnings("unchecked")
